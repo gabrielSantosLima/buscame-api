@@ -19,6 +19,7 @@ extra["springCloudVersion"] = "Hoxton.SR8"
 
 dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("com.ibm.watson:visual-recognition:8.6.0")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
