@@ -8,8 +8,11 @@ class Orchestrator {
     private val VG_APIKEY = "AS488150202020sads515"
     private val PS_APIKEY = "AS488150202020sads515"
 
-    private val imageRobot = ImageRobot(VG_APIKEY)
-    private val productSearchRobot = ProductSearchRobot(PS_APIKEY)
+    private val URL_VG = ""
+    private val URL_PS = ""
+
+    private val imageRobot = ImageRobot(VG_APIKEY, URL_VG)
+    private val productSearchRobot = ProductSearchRobot(PS_APIKEY, URL_PS)
 
     fun search(imageDto: ImageDto, params: Map<String, String?>) : List<ProductDto>{
 
