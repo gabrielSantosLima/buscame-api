@@ -1,3 +1,5 @@
 package com.app.buscameapi.dto
 
-data class ImageDto(val image : ByteArray)
+import java.io.File
+
+data class ImageDto(val content : File? = null)

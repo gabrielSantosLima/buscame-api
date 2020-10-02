@@ -1,17 +1,35 @@
 package com.app.buscameapi.robots
 
 import com.app.buscameapi.dto.ImageDto
-import java.io.File
+import com.ibm.cloud.sdk.core.security.Authenticator
+import com.ibm.cloud.sdk.core.security.IamAuthenticator
+import com.ibm.watson.visual_recognition.v3.VisualRecognition
+import com.ibm.watson.visual_recognition.v3.model.ClassifiedImages
+import com.ibm.watson.visual_recognition.v3.model.ClassifyOptions
+import java.io.FileInputStream
 
-class ImageRobot(override val API_KEY: String) : IImageRobot {
+class ImageRobot(override val API_KEY: String, override val SERVICE_URL: String) : IImageRobot {
+
+    private var authenticator :  Authenticator? = null
+    private var service: VisualRecognition? = null
 
     override fun authenticate() {
-        TODO("Implementar autenticação")
+        authenticator = IamAuthenticator(API_KEY)
+        service = VisualRecognition("2020-09-30", authenticator)
+        service?.setServiceUrl(SERVICE_URL)!!
     }
 
-    override fun imageAnalyzer(image: ImageDto) : String{
-        TODO("Implementar analizador de imagem")
+    @Throws(Exception::class)
+    override fun imageAnalyzer(image: ImageDto) : ClassifiedImages? {
 
-        return "computer"
+        authenticator ?: return null
+
+        val options = ClassifyOptions.Builder()
+                .imagesFile(image.content)
+                .build()
+
+        val result : ClassifiedImages? = service?.classify(options)?.execute()?.result
+
+        return result!!
     }
 }
