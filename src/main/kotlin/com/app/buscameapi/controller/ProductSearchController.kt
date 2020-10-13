@@ -1,14 +1,13 @@
 package com.app.buscameapi.controller
 
 import com.app.buscameapi.dto.ImageDto
-import com.app.buscameapi.dto.ProductDto
+import com.app.buscameapi.dto.Search
 import com.app.buscameapi.robots.Orchestrator
 import com.ibm.watson.visual_recognition.v3.model.ClassifiedImages
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.io.*
-import java.nio.ByteBuffer
-import java.nio.file.Files
 
 @RestController
 @RequestMapping("/api/search")
@@ -17,13 +16,13 @@ class ProductSearchController {
     private val orchestrator = Orchestrator()
 
     @PostMapping("/text")
-    fun searchByText(@RequestBody text : String?,
+    fun searchByText(@RequestParam text : String?,
                      @RequestParam url : String?,
                      @RequestParam price : String?,
                      @RequestParam brandName : String?
-    ) : List<ProductDto>{
+    ) : Search?{
 
-        text ?: return emptyList()
+        text ?: return null
 
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
 
@@ -35,9 +34,9 @@ class ProductSearchController {
                       @RequestParam url : String?,
                       @RequestParam price : String?,
                       @RequestParam brandName : String?
-    ) : List<ProductDto>{
+    ) : Search?{
 
-        image?.content ?: return emptyList()
+        image?.content ?: return null
 
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
 
