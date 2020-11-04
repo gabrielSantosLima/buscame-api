@@ -1,5 +1,6 @@
 package com.app.buscameapi.robots
 
+import com.app.buscameapi.dto.ClassifierDto
 import com.app.buscameapi.dto.ImageDto
 import com.ibm.cloud.sdk.core.security.Authenticator
 import com.ibm.cloud.sdk.core.security.IamAuthenticator
@@ -10,7 +11,7 @@ import java.io.FileInputStream
 
 class ImageRobot(override val API_KEY: String, override val SERVICE_URL: String) : IImageRobot {
 
-    private var authenticator :  Authenticator? = null
+    private lateinit var authenticator :  Authenticator
     private var service: VisualRecognition? = null
 
     override fun authenticate() {
@@ -20,16 +21,21 @@ class ImageRobot(override val API_KEY: String, override val SERVICE_URL: String)
     }
 
     @Throws(Exception::class)
-    override fun imageAnalyzer(image: ImageDto) : ClassifiedImages? {
-
-        authenticator ?: return null
+    override fun imageAnalyzer(image: ImageDto) : List<ClassifierDto> {
+        authenticate()
 
         val options = ClassifyOptions.Builder()
                 .imagesFile(image.content)
                 .build()
 
-        val result : ClassifiedImages? = service?.classify(options)?.execute()?.result
+        val classifiedImages : ClassifiedImages? = service?.classify(options)?.execute()?.result
 
-        return result!!
+        classifiedImages ?: return emptyList()
+
+        val classifiers = classifiedImages.images[0].classifiers[0].classes?.map {
+            ClassifierDto(it.score.toDouble(), it.typeHierarchy, it.xClass)
+        }
+
+        return classifiers!!
     }
 }

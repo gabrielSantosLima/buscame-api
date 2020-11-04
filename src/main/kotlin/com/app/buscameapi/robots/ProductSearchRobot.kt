@@ -1,7 +1,11 @@
 package com.app.buscameapi.robots
 
-import com.app.buscameapi.dto.Search
+import com.app.buscameapi.dto.ProductDto
+import com.app.buscameapi.dto.jsonRepresentations.Search
+import com.app.buscameapi.util.randomNumberHex
 import org.springframework.web.client.RestTemplate
+import java.io.File
+import kotlin.jvm.Throws
 
 class ProductSearchRobot (
         override val API_KEY: String,
@@ -13,9 +17,33 @@ class ProductSearchRobot (
 
     private val restTemplate = RestTemplate()
 
-    override fun search(text: String, params: Map<String, String?>) : Search {
-        URL += "&q=${text}"
+    @Throws
+    override fun search(text: String, params: Map<String, String?>) : List<ProductDto> {
+        URL += "&q=$text"
 
-        return restTemplate.getForObject(URL, Search::class.java)!!
+        val result = restTemplate.getForObject(URL, Search::class.java)
+
+        result ?: return emptyList()
+
+        val products = result.items.map {
+
+            val title = it.title
+            val price = it.pagemap?.offer?.get(0)?.price?.replace("R\$", "")?.toDouble()
+            val description = it.title
+            val url = it.link
+            val image = null
+
+            ProductDto(
+                    randomNumberHex(),
+                    text,
+                    title,
+                    price,
+                    description,
+                    url,
+                    image
+            )
+        }
+
+        return products
     }
 }

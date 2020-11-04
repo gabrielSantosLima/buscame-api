@@ -1,9 +1,9 @@
 package com.app.buscameapi.robots
 
 import com.app.buscameapi.dto.ImageDto
-import com.ibm.watson.visual_recognition.v3.model.ClassifiedImages
+import com.app.buscameapi.dto.ClassifierDto
 
 interface IImageRobot: IRobot, IAuthenticateRobot{
 
-    fun imageAnalyzer(image : ImageDto) : ClassifiedImages?
+    fun imageAnalyzer(image : ImageDto) : List<ClassifierDto>
 }

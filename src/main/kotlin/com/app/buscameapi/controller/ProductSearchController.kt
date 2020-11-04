@@ -1,10 +1,9 @@
 package com.app.buscameapi.controller
 
+import com.app.buscameapi.dto.ClassifierDto
 import com.app.buscameapi.dto.ImageDto
-import com.app.buscameapi.dto.Search
+import com.app.buscameapi.dto.ProductDto
 import com.app.buscameapi.robots.Orchestrator
-import com.ibm.watson.visual_recognition.v3.model.ClassifiedImages
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.io.*
@@ -20,38 +19,43 @@ class ProductSearchController {
                      @RequestParam url : String?,
                      @RequestParam price : String?,
                      @RequestParam brandName : String?
-    ) : Search?{
+    ) : List<ProductDto>{
 
-        text ?: return null
+        text ?: return emptyList()
 
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
 
         return orchestrator.searchByText(text, params)
     }
 
-    @PostMapping("/image")
-    fun searchByImage(@RequestBody image : ImageDto?,
+    @PostMapping(value = ["/image"], consumes = [ MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE])
+    fun searchByImage(@RequestBody image : ByteArray,
                       @RequestParam url : String?,
                       @RequestParam price : String?,
                       @RequestParam brandName : String?
-    ) : Search?{
-
-        image?.content ?: return null
+    ) : List<ProductDto>{
 
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
-
-        return orchestrator.search(image, params)
-    }
-
-    @PostMapping(value = ["/image-analyse"], consumes = [ MediaType.IMAGE_JPEG_VALUE])
-    fun searchByImage(@RequestBody image : ByteArray) : ClassifiedImages?{
 
         val file : File = createTempFile()
         file.writeBytes(image)
 
         val imageDto = ImageDto(file)
 
-        imageDto?.content ?: return null
+        imageDto?.content ?: return emptyList()
+
+        return orchestrator.search(imageDto, params)
+    }
+
+    @PostMapping(value = ["/image-analyse"], consumes = [ MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE])
+    fun searchByImage(@RequestBody image : ByteArray) : List<ClassifierDto>{
+
+        val file : File = createTempFile()
+        file.writeBytes(image)
+
+        val imageDto = ImageDto(file)
+
+        imageDto?.content ?: return emptyList()
 
         return orchestrator.analyseImage(imageDto)
     }

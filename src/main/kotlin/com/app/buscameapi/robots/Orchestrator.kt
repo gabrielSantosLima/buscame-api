@@ -1,12 +1,9 @@
 package com.app.buscameapi.robots
 
+import com.app.buscameapi.dto.ClassifierDto
 import com.app.buscameapi.dto.ImageDto
-import com.app.buscameapi.dto.Search
+import com.app.buscameapi.dto.ProductDto
 import com.app.buscameapi.util.Properties
-import com.ibm.watson.visual_recognition.v3.model.ClassifiedImages
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Component
-import java.lang.Exception
 
 class Orchestrator {
 
@@ -30,31 +27,28 @@ class Orchestrator {
             CS_URL!!
     )
 
-    fun search(imageDto: ImageDto, params: Map<String, String?>) : Search?{
-        imageRobot.authenticate()
-        val text = imageRobot.imageAnalyzer(imageDto)
+    fun search(imageDto: ImageDto, params: Map<String, String?>) : List<ProductDto>{
+        val classifiers = analyseImage(imageDto)
 
-        return null
-//        return productSearchRobot.search(text, params)
-    }
+        val allowedClassifiers = classifiers.filter{ it.score > 0.8 }
+        val terms = allowedClassifiers.map { it.classification }
 
-    fun searchByText(text: String, params: Map<String, String?>) : Search?{
-        var result: Search?
+        var finalTerm = ""
 
-        try{
-            result = productSearchRobot.search(text, params)
-        }catch(error: Exception){
-            print("[orchestrator] Erro: $error")
-            return null
+        terms.forEach {
+            finalTerm += "$it "
         }
 
-        return result
+        return searchByText(finalTerm, params)
     }
 
-    fun analyseImage(imageDto: ImageDto) : ClassifiedImages {
-        imageRobot.authenticate()
-        val results = imageRobot.imageAnalyzer(imageDto)
+    fun searchByText(text: String, params: Map<String, String?>) : List<ProductDto>{
+        val products = productSearchRobot.search(text, params)
 
-        return results!!
+        return products
+    }
+
+    fun analyseImage(imageDto: ImageDto) : List<ClassifierDto> {
+        return imageRobot.imageAnalyzer(imageDto)
     }
 }

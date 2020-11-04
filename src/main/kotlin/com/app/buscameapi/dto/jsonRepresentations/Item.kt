@@ -1,4 +1,4 @@
-package com.app.buscameapi.dto
+package com.app.buscameapi.dto.jsonRepresentations
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 
