@@ -6,7 +6,7 @@ build/
 !**/src/test/**/build/
 
 #Credentials
-src/main/resources/credentials.properties
+credentials.properties
 
 ### STS ###
 .apt_generated
