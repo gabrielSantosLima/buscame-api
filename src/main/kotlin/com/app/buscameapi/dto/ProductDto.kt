@@ -1,10 +1,13 @@
 package com.app.buscameapi.dto
 
-data class ProductDto(val name : String,
-                      val text : String,
-                      val price : Double,
-                      val image : ByteArray,
-                      val description : String,
-                      val url : String,
-                      val brandName : String
+import java.io.File
+
+data class ProductDto(
+        var id: String?,
+        val term : String,
+        val title : String,
+        val price : Double?,
+        val description: String,
+        val url : String,
+        val image : File?
 )
