@@ -1,5 +1,5 @@
 package com.app.buscameapi.robots
 
-interface ITranslateRobot: IRobot, IAuthenticateRobot {
+interface ITranslateRobot: IRobot {
     fun translate(text: String) : String
 }
