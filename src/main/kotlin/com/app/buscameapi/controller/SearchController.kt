@@ -10,7 +10,7 @@ import java.io.*
 
 @RestController
 @RequestMapping("/api/search")
-class ProductSearchController {
+class SearchController {
 
     private val orchestrator = Orchestrator()
 
@@ -25,7 +25,7 @@ class ProductSearchController {
 
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
 
-        return orchestrator.searchByText(text, params)
+        return orchestrator.search(text, params)
     }
 
     @PostMapping(value = ["/image"], consumes = [ MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE])
