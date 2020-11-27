@@ -8,17 +8,17 @@ class Orchestrator {
     private val translateRobot = TranslateRobot()
     private val productSearchRobot = ProductSearchRobot()
 
-    fun search(imageDto: ImageDto, params: Map<String, String?>) : List<ProductDto>{
+    fun search(imageDto: ImageDto, params: Map<String, String?>, page: Int = 0) : List<ProductDto>{
         val terms = analyseImage(imageDto)
         val sentence = translateAllToSentence(terms)
-        return search(sentence, params)
+        return search(sentence, params, page)
     }
 
-    fun search(text: String, params: Map<String, String?>) = productSearchRobot.search(text, params)
+    fun search(text: String, params: Map<String, String?>, page: Int = 0) = productSearchRobot.search(text, params, page)
 
     fun analyseImage(imageDto: ImageDto) = imageRobot.imageAnalyzer(imageDto)
 
-    fun translateAllToSentence(terms : List<String>) : String{
+    private fun translateAllToSentence(terms : List<String>) : String{
         var sentence = ""
         terms.forEach {
             val translation = translate(it)
@@ -27,5 +27,5 @@ class Orchestrator {
         return sentence
     }
 
-    fun translate(term : String) = translateRobot.translate(term)
+    private fun translate(term : String) = translateRobot.translate(term)
 }

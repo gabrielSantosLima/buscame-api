@@ -17,25 +17,33 @@ class SearchController {
     fun searchByText(@RequestParam text : String?,
                      @RequestParam url : String?,
                      @RequestParam price : String?,
-                     @RequestParam brandName : String?
+                     @RequestParam brandName : String?,
+                     @RequestParam page : Int?
     ) : List<ProductDto>{
         text ?: return emptyList()
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
-        return orchestrator.search(text, params)
+
+        page ?: return orchestrator.search(text, params)
+
+        return orchestrator.search(text, params, page)
     }
 
     @PostMapping(value = ["/image"], consumes = [ MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE ])
     fun searchByImage(@RequestBody image : ByteArray,
                       @RequestParam url : String?,
                       @RequestParam price : String?,
-                      @RequestParam brandName : String?
+                      @RequestParam brandName : String?,
+                      @RequestParam page : Int?
     ) : List<ProductDto>{
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
         val file : File = createTempFile()
         file.writeBytes(image)
         val imageDto = ImageDto(file)
-        imageDto?.content ?: return emptyList()
-        return orchestrator.search(imageDto, params)
+        imageDto.content ?: return emptyList()
+
+        page ?: return orchestrator.search(imageDto, params)
+
+        return orchestrator.search(imageDto, params, page)
     }
 
     @PostMapping(value = ["/image-analyse"], consumes = [ MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE])
@@ -43,7 +51,7 @@ class SearchController {
         val file : File = createTempFile()
         file.writeBytes(image)
         val imageDto = ImageDto(file)
-        imageDto?.content ?: return emptyList()
+        imageDto.content ?: return emptyList()
         return orchestrator.analyseImage(imageDto)
     }
 }
