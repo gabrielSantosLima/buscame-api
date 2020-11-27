@@ -27,12 +27,11 @@ class TranslateRobot : ITranslateRobot{
                 .target(PORTUGUESE)
                 .build()
 
-        val firstWordTranslation = service?.translate(translateOptions)
-                ?.execute()
-                ?.getResult()
-                ?.translations
-                ?.get(0)
-                ?.translation
+        val firstWordTranslation = service.translate(translateOptions)
+                .execute()
+                .result
+                .translations[0]
+                .translation
                 .toString()
 
         return firstWordTranslation

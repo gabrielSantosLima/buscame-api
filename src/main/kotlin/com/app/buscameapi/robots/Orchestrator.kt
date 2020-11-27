@@ -3,22 +3,24 @@ package com.app.buscameapi.robots
 import com.app.buscameapi.dto.ImageDto
 import com.app.buscameapi.dto.ProductDto
 
-class Orchestrator {
-    private val imageRobot = ImageRobot()
-    private val translateRobot = TranslateRobot()
-    private val productSearchRobot = ProductSearchRobot()
-
-    fun search(imageDto: ImageDto, params: Map<String, String?>) : List<ProductDto>{
+class Orchestrator(
+        private val imageRobot: IImageRobot,
+        private val translateRobot: ITranslateRobot,
+        private val productSearchRobot: IProductSearchRobot
+){
+    fun search(imageDto: ImageDto, params: Map<String, String?>, page: Int = 1) : List<ProductDto>{
         val terms = analyseImage(imageDto)
         val sentence = translateAllToSentence(terms)
-        return search(sentence, params)
+        return search(sentence, params, page)
     }
 
-    fun search(text: String, params: Map<String, String?>) = productSearchRobot.search(text, params)
+    fun search(text: String, params: Map<String, String?>, page: Int = 1) : List<ProductDto> {
+        return productSearchRobot.search(text, params, page)
+    }
 
     fun analyseImage(imageDto: ImageDto) = imageRobot.imageAnalyzer(imageDto)
 
-    fun translateAllToSentence(terms : List<String>) : String{
+    private fun translateAllToSentence(terms : List<String>) : String{
         var sentence = ""
         terms.forEach {
             val translation = translate(it)
@@ -27,5 +29,5 @@ class Orchestrator {
         return sentence
     }
 
-    fun translate(term : String) = translateRobot.translate(term)
+    private fun translate(term : String) = translateRobot.translate(term)
 }

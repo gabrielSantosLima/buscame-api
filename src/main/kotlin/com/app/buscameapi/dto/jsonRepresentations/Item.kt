@@ -17,8 +17,7 @@ class Map(
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 class Price(
-        val pricecurrency :String,
-        val price :String
+        val price : String?
 )
 
 @JsonIgnoreProperties(ignoreUnknown = true)
