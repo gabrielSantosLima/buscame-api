@@ -2,16 +2,24 @@ package com.app.buscameapi.controller
 
 import com.app.buscameapi.dto.ImageDto
 import com.app.buscameapi.dto.ProductDto
+import com.app.buscameapi.robots.ImageRobot
 import com.app.buscameapi.robots.Orchestrator
+import com.app.buscameapi.robots.ProductSearchRobot
+import com.app.buscameapi.robots.TranslateRobot
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.io.*
 
+@SuppressWarnings("unuse")
 @RestController
 @RequestMapping("/api/search")
-class SearchController {
+class SearchController{
 
-    private val orchestrator = Orchestrator()
+    private var orchestrator: Orchestrator = Orchestrator(
+            ImageRobot(),
+            TranslateRobot(),
+            ProductSearchRobot()
+    )
 
     @PostMapping("/text")
     fun searchByText(@RequestParam text : String?,
@@ -22,9 +30,7 @@ class SearchController {
     ) : List<ProductDto>{
         text ?: return emptyList()
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
-
         page ?: return orchestrator.search(text, params)
-
         return orchestrator.search(text, params, page)
     }
 
