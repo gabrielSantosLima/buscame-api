@@ -10,7 +10,6 @@ import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.io.*
 
-@SuppressWarnings("unuse")
 @RestController
 @RequestMapping("/api/search")
 class SearchController{
@@ -23,32 +22,28 @@ class SearchController{
 
     @PostMapping("/text")
     fun searchByText(@RequestParam text : String?,
-                     @RequestParam url : String?,
-                     @RequestParam price : String?,
-                     @RequestParam brandName : String?,
-                     @RequestParam page : Int?
+                     @RequestParam(required = false, defaultValue = "") url : String,
+                     @RequestParam(required = false, defaultValue = "0.0") price : String,
+                     @RequestParam(required = false, defaultValue = "") brandName : String,
+                     @RequestParam(required = false, defaultValue = "1") page : Int
     ) : List<ProductDto>{
         text ?: return emptyList()
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
-        page ?: return orchestrator.search(text, params)
         return orchestrator.search(text, params, page)
     }
 
     @PostMapping(value = ["/image"], consumes = [ MediaType.IMAGE_PNG_VALUE, MediaType.IMAGE_JPEG_VALUE ])
     fun searchByImage(@RequestBody image : ByteArray,
-                      @RequestParam url : String?,
-                      @RequestParam price : String?,
-                      @RequestParam brandName : String?,
-                      @RequestParam page : Int?
+                      @RequestParam(required = false, defaultValue = "") url : String,
+                      @RequestParam(required = false, defaultValue = "0.0") price : String,
+                      @RequestParam(required = false, defaultValue = "") brandName : String,
+                      @RequestParam(required = false, defaultValue = "1") page : Int
     ) : List<ProductDto>{
         val params = mapOf("url" to url, "price" to price, "brandName" to brandName)
-        val file : File = createTempFile()
+        val file = createTempFile()
         file.writeBytes(image)
         val imageDto = ImageDto(file)
         imageDto.content ?: return emptyList()
-
-        page ?: return orchestrator.search(imageDto, params)
-
         return orchestrator.search(imageDto, params, page)
     }
 

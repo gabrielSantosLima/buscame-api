@@ -24,7 +24,7 @@ class ProductSearchRobot : IProductSearchRobot {
         )
     }
 
-    override fun search(text: String, params: Map<String, String?>, page: Int) : List<ProductDto> {
+    override fun search(text: String, params: Map<String, Any>, page: Int) : List<ProductDto> {
         if (text.isEmpty()) return emptyList()
         val authenticatedUrl = authenticate() as String
         var pageOfSearch = page
@@ -48,15 +48,31 @@ class ProductSearchRobot : IProductSearchRobot {
         try{
             val result = restTemplate.getForObject(finalUrl, Search::class.java)
             result ?: return emptyList()
-            return formatResult(result, text)
+            return formatResult(result, text, params)
         }catch (e : Exception){
             e.printStackTrace()
             return emptyList()
         }
     }
 
-    private fun formatResult(result : Search, text: String) : List<ProductDto>{
-        return result.items.map {
+    private fun formatResult(
+            result : Search,
+            text: String,
+            params: Map<String, Any>
+    ) : List<ProductDto>{
+        val priceFilter = if(params["price"] == null)  0.0 else params["price"].toString().toDouble()
+        val brandNameFilter = if(params["brandName"] == null)  "" else params["brandName"] as String
+
+        var applyFilters = result.items.filter {
+            item -> item.title.contains(brandNameFilter)
+        }
+
+        applyFilters = applyFilters.filter {
+            item -> item.pagemap?.offer?.get(0)?.price?.replace(",", ".")?.toDouble() !== null
+                && item.pagemap?.offer?.get(0)?.price?.replace(",", ".")?.toDouble()!! >= priceFilter
+        }
+
+        return applyFilters.map {
             val title = it.title
             val price = it.pagemap?.offer?.get(0)?.price?.replace(",", ".")?.toDouble()
             val description = it.title
