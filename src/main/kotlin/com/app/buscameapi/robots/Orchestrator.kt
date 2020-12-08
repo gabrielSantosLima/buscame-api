@@ -8,13 +8,13 @@ class Orchestrator(
         private val translateRobot: ITranslateRobot,
         private val productSearchRobot: IProductSearchRobot
 ){
-    fun search(imageDto: ImageDto, params: Map<String, String?>, page: Int = 1) : List<ProductDto>{
+    fun search(imageDto: ImageDto, params: Map<String, Any>, page: Int = 1) : List<ProductDto>{
         val terms = analyseImage(imageDto)
         val sentence = translateAllToSentence(terms)
         return search(sentence, params, page)
     }
 
-    fun search(text: String, params: Map<String, String?>, page: Int = 1) : List<ProductDto> {
+    fun search(text: String, params: Map<String, Any>, page: Int = 1) : List<ProductDto> {
         return productSearchRobot.search(text, params, page)
     }
 
