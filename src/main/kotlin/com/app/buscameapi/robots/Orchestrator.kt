@@ -24,7 +24,7 @@ class Orchestrator(
         var sentence = ""
         terms.forEach {
             val translation = translate(it)
-            sentence += translation
+            sentence += translation + " "
         }
         return sentence
     }
