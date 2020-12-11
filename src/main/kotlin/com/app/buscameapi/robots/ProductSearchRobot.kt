@@ -48,7 +48,7 @@ class ProductSearchRobot : IProductSearchRobot {
         try{
             val result = restTemplate.getForObject(finalUrl, Search::class.java)
             result ?: return emptyList()
-            return formatResult(result, text, params)
+            return formatResult(result, text, params) + se
         }catch (e : Exception){
             e.printStackTrace()
             return emptyList()

@@ -11,7 +11,7 @@ class ImageRobot : IImageRobot {
 
     private val API_KEY = PropertiesOfFile.getProperty("VG_APIKEY")
     private val SERVICE_URL = PropertiesOfFile.getProperty("VG_URL")
-    private val SCORE_SEARCH = 0.7
+    private val SCORE_SEARCH = 0.5
 
     override fun authenticate() : Any{
         val authenticator = IamAuthenticator(API_KEY)
