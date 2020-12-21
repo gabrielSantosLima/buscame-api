@@ -35,20 +35,22 @@ class ProductSearchRobot : IProductSearchRobot {
 
         var finalUrl = concatUrlParams(authenticatedUrl, mapOf(
                 "q" to text,
-                "start" to pageOfSearch)
+                "start" to pageOfSearch
+            )
         )
 
         if(params["url"] != null) {
             finalUrl = concatUrlParams(finalUrl, mapOf(
                     "siteSearchFilter" to TYPEOF_URL_FILTER,
-                    "siteSearch" to (params["url"] ?: "")
+                    "siteSearch" to (params["url"] ?: ""
+                )
             ))
         }
 
         try{
             val result = restTemplate.getForObject(finalUrl, Search::class.java)
             result ?: return emptyList()
-            return formatResult(result, text, params) + se
+            return formatResult(result, text, params)
         }catch (e : Exception){
             e.printStackTrace()
             return emptyList()

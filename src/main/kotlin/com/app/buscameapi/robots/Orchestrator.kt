@@ -10,7 +10,7 @@ class Orchestrator(
 ){
     fun search(imageDto: ImageDto, params: Map<String, Any>, page: Int = 1) : List<ProductDto>{
         val terms = analyseImage(imageDto)
-        val limitedTerms = if(terms.size > 3) terms.toTypedArray().copyOf(3).toList() else terms
+        val limitedTerms = if(terms.size > 1) terms.toTypedArray().copyOf(1).toList() else terms
         val sentence = translateAllToSentence(limitedTerms)
         return search(sentence, params, page)
     }
