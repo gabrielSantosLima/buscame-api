@@ -26,19 +26,19 @@ A API de busca irá permitir buscar produtos por texto ou imagem utilizando os s
 ### Autores
 <p>
   <img src="https://github.com/gabrielSantosLima.png" width=20 alt="Gabriel Lima">
-  <a href="">Gabriel Lima</a>
+  <a href="https://github.com/gabrielSantosLima">Gabriel Lima</a>
 </p>
 <p>
   <img src="https://github.com/jonasjss.png" width=20 alt="Jonas Santos">
-  <a href="">Jonas Santos</a>
+  <a href="https://github.com/jonasjss">Jonas Santos</a>
 </p>
 <p>
   <img src="https://github.com/melinnediniz.png" width=20 alt="Melinne Diniz">
-  <a href="">Melinne Diniz</a>
+  <a href="https://github.com/melinnediniz">Melinne Diniz</a>
 </p>
 <p>
   <img src="https://github.com/sarahj315.png" width=20 alt="Sarah Júlia">
-  <a href="">Sarah Júlia</a>
+  <a href="https://github.com/sarahj315">Sarah Júlia</a>
 </p>
 
 ## Instalação
