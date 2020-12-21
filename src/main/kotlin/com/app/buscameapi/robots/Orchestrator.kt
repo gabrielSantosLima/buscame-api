@@ -10,7 +10,8 @@ class Orchestrator(
 ){
     fun search(imageDto: ImageDto, params: Map<String, Any>, page: Int = 1) : List<ProductDto>{
         val terms = analyseImage(imageDto)
-        val sentence = translateAllToSentence(terms)
+        val limitedTerms = if(terms.size > 1) terms.toTypedArray().copyOf(1).toList() else terms
+        val sentence = translateAllToSentence(limitedTerms)
         return search(sentence, params, page)
     }
 
@@ -20,11 +21,13 @@ class Orchestrator(
 
     fun analyseImage(imageDto: ImageDto) = imageRobot.imageAnalyzer(imageDto)
 
-    private fun translateAllToSentence(terms : List<String>) : String{
+    private fun translateAllToSentence(terms : List<String?>) : String{
         var sentence = ""
         terms.forEach {
-            val translation = translate(it)
-            sentence += translation + " "
+            if(!it.isNullOrEmpty()){
+                val translation = translate(it!!)
+                sentence += "$translation "
+            }
         }
         return sentence
     }
