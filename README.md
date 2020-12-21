@@ -81,7 +81,7 @@ CS_URL=https://www.googleapis.com/customsearch/v1
 ### POST
 - `/api/search/text?text=<TERMO_DE_BUSCA>`: busca por texto.
 - `/api/search/image-analyse`: analisar uma imagem passando esta imagem do tipo `ByteArray` no corpo da requisição.
-- `/api/search/image`: busca por imagem.
+- `/api/search/image`: busca por imagem passando esta imagem do tipo `ByteArray` no corpo da requisição.
 
 ### Parâmetros (busca por texto e imagem)
 - `brandName`: filtro de marca.
@@ -100,8 +100,7 @@ CS_URL=https://www.googleapis.com/customsearch/v1
   "description": "Moletom 284 Gato | Netshoes",
   "url": "https://www.netshoes.com.br/moletom-284-gato-off+white-E97-0265-205",
   "image": "https://static.netshoes.com.br/produtos/moletom-284-gato/05/E97-0265-205/E97-0265-205_zoom1.jpg?ims=544x"
-},
-...
+}
 ]
 ```
 
