@@ -80,15 +80,16 @@ CS_URL=https://www.googleapis.com/customsearch/v1
 ## Rotas
 ### POST
 - `/api/search/text?text=<TERMO_DE_BUSCA>`: busca por texto.
-- `/api/search/image`: busca por imagem passando a imagem do tipo `ByteArray` no corpo da requisição .
+- `/api/search/image-analyse`: analisar uma imagem passando esta imagem do tipo `ByteArray` no corpo da requisição.
+- `/api/search/image`: busca por imagem.
 
-### Parâmetros
+### Parâmetros (busca por texto e imagem)
 - `brandName`: filtro de marca.
 - `url`: filtro de url de site.
 - `price`: filtro de preço.
 - `page`: número da página de busca.
 
-### Exemplo de Resultado
+### Exemplo de Resultado (pesquisa por texto e imagem )
 ```json
 [
 {
@@ -101,5 +102,20 @@ CS_URL=https://www.googleapis.com/customsearch/v1
   "image": "https://static.netshoes.com.br/produtos/moletom-284-gato/05/E97-0265-205/E97-0265-205_zoom1.jpg?ims=544x"
 },
 ...
+]
+```
+
+### Exemplo de Resultado (analisar imagem)
+```json
+[
+  "cat",
+  "feline",
+  "carnivore",
+  "mammal",
+  "animal",
+  "tabby cat",
+  "domestic cat",
+  "wildcat",
+  "ash grey color"
 ]
 ```
